@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>git-sibling-cloner · Fast, Fail-Safe Sibling Workspace Cloner</title>
+  <meta name="description" content="Fast, fail-safe shallow-cloning of Git repositories side-by-side as siblings from any Source of Truth manifest. Cross-platform process-tree termination and zero-hang guarantees.">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #ffffff;
+      color: #1f2328;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+    }
+    a {
+      color: #0969da;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .header {
+      border-bottom: 1px solid #d0d7de;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 920px;
+      margin: 0 auto;
+    }
+    .header-title {
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: #1f2328;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .header-title span.badge {
+      background: #f6f8fa;
+      border: 1px solid #d0d7de;
+      border-radius: 12px;
+      padding: 2px 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #57606a;
+    }
+    .header-links {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .header-links a {
+      font-size: 0.95rem;
+      color: #656d76;
+    }
+    .header-links a:hover {
+      color: #0969da;
+    }
+    .container {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+      color: #1f2328;
+      line-height: 1.2;
+    }
+    p.lead {
+      font-size: 1.25rem;
+      color: #656d76;
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+    .command-box {
+      background: #f6f8fa;
+      border: 1px solid #d0d7de;
+      border-radius: 8px;
+      padding: 18px 20px;
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 1.1rem;
+      color: #0969da;
+      margin-bottom: 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .command-box code {
+      color: #0969da;
+      user-select: all;
+    }
+    .command-box code span.prompt {
+      color: #8c959f;
+      margin-right: 8px;
+      user-select: none;
+    }
+    .copy-btn {
+      background: #ffffff;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      color: #24292f;
+      font-family: inherit;
+      transition: background 0.15s ease;
+    }
+    .copy-btn:hover {
+      background: #f3f4f6;
+    }
+    h2 {
+      font-size: 1.65rem;
+      font-weight: 700;
+      margin: 44px 0 16px;
+      color: #1f2328;
+      border-bottom: 1px solid #eaeef2;
+      padding-bottom: 8px;
+    }
+    p {
+      margin-bottom: 16px;
+      font-size: 1.05rem;
+      color: #1f2328;
+    }
+    ul {
+      margin: 0 0 24px 24px;
+    }
+    li {
+      margin-bottom: 8px;
+      font-size: 1.02rem;
+    }
+    pre {
+      background: #f6f8fa;
+      border: 1px solid #d0d7de;
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: #1f2328;
+      margin: 20px 0 32px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin: 24px 0 36px;
+    }
+    .card {
+      border: 1px solid #d0d7de;
+      border-radius: 8px;
+      padding: 20px;
+      background: #ffffff;
+    }
+    .card h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #0969da;
+    }
+    .card p {
+      font-size: 0.95rem;
+      color: #57606a;
+      margin-bottom: 0;
+      line-height: 1.5;
+    }
+    .ecosystem-banner {
+      background: #f6f8fa;
+      border: 1px solid #d0d7de;
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin: 32px 0;
+    }
+    .ecosystem-banner h3 {
+      font-size: 1.15rem;
+      margin-bottom: 8px;
+      color: #1f2328;
+    }
+    .footer {
+      border-top: 1px solid #d0d7de;
+      padding: 36px 24px;
+      text-align: center;
+      color: #656d76;
+      font-size: 0.92rem;
+      max-width: 880px;
+      margin: 0 auto;
+    }
+    .footer a {
+      color: #0969da;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-title">
+      git-sibling-cloner
+      <span class="badge">v1.0.1</span>
+    </div>
+    <nav class="header-links">
+      <a href="https://www.npmjs.com/package/git-sibling-cloner" target="_blank" rel="noopener">npm</a>
+      <a href="https://github.com/keshavsoft/git-sibling-cloner" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/keshavsoft/git-sibling-cloner/blob/main/STRUCTURE.md" target="_blank" rel="noopener">Architecture</a>
+      <a href="https://keshavsoft.github.io/npm-source-explorer/">Suite Docs</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>Clone Side-by-Side.<br>Fail-Safe & Zero-Hang.</h1>
+    <p class="lead">
+      Fast, fail-safe shallow-cloning of Git repositories side-by-side as siblings from any Source of Truth manifest.
+    </p>
+
+    <div class="command-box">
+      <code><span class="prompt">$</span>npx git-sibling-cloner &lt;manifest.json&gt; [destination]</code>
+      <button class="copy-btn" onclick="navigator.clipboard.writeText('npx git-sibling-cloner manifest.json '); this.innerText='Copied!'; setTimeout(()=>this.innerText='Copy', 2000)">Copy</button>
+    </div>
+
+    <h2>Why We Built This</h2>
+    <p>
+      Standard <code>git clone</code> commands can hang indefinitely when dealing with dead remotes, missing repos, or interactive terminal credential prompts. If you're building multi-repo workspaces or cloning 20 dependencies at once, a single frozen clone blocks your entire toolchain.
+    </p>
+    <p>
+      <code>git-sibling-cloner</code> is designed specifically for dependable, automated sibling workspace cloning:
+    </p>
+
+    <div class="grid">
+      <div class="card">
+        <h4>⚡ 25s Fail-Safe Timeout</h4>
+        <p>Each repository clone is bounded by a strict timeout (configurable). A dead server or private repository will never freeze your command.</p>
+      </div>
+      <div class="card">
+        <h4>🛑 Process-Tree Termination</h4>
+        <p>When a clone times out, it kills the entire process tree using <code>taskkill /pid /T /F</code> on Windows and <code>SIGKILL</code> on POSIX, leaving zero zombie locks.</p>
+      </div>
+      <div class="card">
+        <h4>🔒 Prompt Suppression</h4>
+        <p>Runs with <code>GIT_TERMINAL_PROMPT=0</code> and <code>GIT_ASKPASS=echo</code> to instantly reject interactive username/password prompts.</p>
+      </div>
+      <div class="card">
+        <h4>⏩ Incremental Skips</h4>
+        <p>Safely checks destination folders before cloning. Repositories already present on disk are skipped in 0ms, making reruns instant.</p>
+      </div>
+    </div>
+
+    <h2>Input Manifest Format</h2>
+    <p>Accepts a clean JSON array of repository specifications:</p>
+
+    <pre>
+[
+  {
+    "folder": "express",
+    "cloneUrl": "https://github.com/expressjs/express.git"
+  },
+  {
+    "folder": "accepts",
+    "cloneUrl": "https://github.com/jshttp/accepts.git"
+  }
+]
+    </pre>
+
+    <h2>Usage Examples</h2>
+
+    <pre>
+# 1. Clone into current directory from a manifest file
+npx git-sibling-cloner repos.json
+
+# 2. Clone into a dedicated folder
+npx git-sibling-cloner repos.json ./workspace
+
+# 3. Stream manifest directly via standard input (UNIX pipe)
+cat repos.json | npx git-sibling-cloner ./workspace
+    </pre>
+
+    <h2>UNIX Composable Pipeline</h2>
+    <p>
+      Pair seamlessly with <code>npm-repo-resolver</code> to discover and clone in a single command:
+    </p>
+
+    <pre>
+npx npm-repo-resolver express | npx git-sibling-cloner ./express-sources
+    </pre>
+
+    <h2>Resulting Workspace Layout</h2>
+
+    <pre>
+my-workspace/
+├── express/          &lt;-- Authentic upstream repo with tests & git history
+├── accepts/          &lt;-- Sibling peer repo
+├── body-parser/      &lt;-- Sibling peer repo
+├── cookie/           &lt;-- Sibling peer repo
+└── qs/               &lt;-- Sibling peer repo
+    </pre>
+
+    <div class="ecosystem-banner">
+      <h3>The KeshavSoft Decoupled Ecosystem</h3>
+      <p style="margin-bottom: 8px;">
+        🔍 <a href="https://keshavsoft.github.io/npm-repo-resolver/"><strong>npm-repo-resolver:</strong></a> Resolves dependencies into a Git Source of Truth manifest.
+      </p>
+      <p style="margin-bottom: 8px;">
+        📥 <strong>git-sibling-cloner:</strong> Fast, fail-safe shallow cloning of any repository manifest into sibling folders.
+      </p>
+      <p style="margin-bottom: 0;">
+        ⚡ <a href="https://keshavsoft.github.io/npm-source-explorer/"><strong>npm-source-explorer:</strong></a> The unified flagship suite that orchestrates both tools.
+      </p>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>
+      Released under the <a href="https://github.com/keshavsoft/git-sibling-cloner/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>.
+      Created by <a href="https://github.com/keshavsoft" target="_blank" rel="noopener">KeshavSoft</a>.
+    </p>
+    <p style="margin-top: 8px; font-size: 0.85rem;">
+      <a href="https://keshavsoft.github.io/git-sibling-cloner/">Documentation</a> •
+      <a href="https://www.npmjs.com/package/git-sibling-cloner">npm</a> •
+      <a href="https://github.com/keshavsoft/git-sibling-cloner">GitHub</a> •
+      <a href="https://keshavsoft.github.io/npm-repo-resolver/">npm-repo-resolver</a> •
+      <a href="https://keshavsoft.github.io/npm-source-explorer/">npm-source-explorer</a>
+    </p>
+  </footer>
+
+</body>
+</html>
+

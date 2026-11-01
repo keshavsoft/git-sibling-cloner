@@ -1,20 +1,22 @@
-# @keshavsoft/git-sibling-cloner
+# git-sibling-cloner
 
 <p align="center">
   <strong>Fast, fail-safe shallow-cloning of Git repositories side-by-side as siblings from any Source of Truth manifest.</strong>
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@keshavsoft/git-sibling-cloner"><img src="https://img.shields.io/npm/v/@keshavsoft/git-sibling-cloner.svg?style=flat-square&color=cb3837" alt="npm version" /></a>
+  <a href="https://www.npmjs.com/package/git-sibling-cloner"><img src="https://img.shields.io/npm/v/git-sibling-cloner.svg?style=flat-square&color=cb3837" alt="npm version" /></a>
+  <a href="https://www.npmjs.com/package/git-sibling-cloner"><img src="https://img.shields.io/npm/dm/git-sibling-cloner.svg?style=flat-square&color=blue" alt="npm downloads" /></a>
   <a href="https://github.com/keshavsoft/git-sibling-cloner"><img src="https://img.shields.io/github/stars/keshavsoft/git-sibling-cloner.svg?style=flat-square&logo=github" alt="GitHub stars" /></a>
-  <a href="https://github.com/keshavsoft/git-sibling-cloner/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/@keshavsoft/git-sibling-cloner.svg?style=flat-square" alt="license" /></a>
-  <a href="https://nodejs.org"><img src="https://img.shields.io/node/v/@keshavsoft/git-sibling-cloner.svg?style=flat-square" alt="node version" /></a>
+  <a href="https://github.com/keshavsoft/git-sibling-cloner/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/git-sibling-cloner.svg?style=flat-square" alt="license" /></a>
+  <a href="https://nodejs.org"><img src="https://img.shields.io/node/v/git-sibling-cloner.svg?style=flat-square" alt="node version" /></a>
 </p>
 
 <p align="center">
+  <a href="https://keshavsoft.github.io/git-sibling-cloner/">🌐 <strong>Documentation Website</strong></a> •
+  <a href="https://www.npmjs.com/package/git-sibling-cloner">📦 <strong>View on npm</strong></a> •
   <a href="https://github.com/keshavsoft/git-sibling-cloner">🐙 <strong>GitHub Repository</strong></a> •
-  <a href="https://www.npmjs.com/package/@keshavsoft/git-sibling-cloner">📦 <strong>View on npm</strong></a> •
-  <a href="https://github.com/keshavsoft/npm-source-explorer">🌐 <strong>Parent Suite (npm-source-explorer)</strong></a> •
+  <a href="https://github.com/keshavsoft/git-sibling-cloner/blob/main/STRUCTURE.md">📖 <strong>Architecture & Layout</strong></a> •
   <a href="#quick-start">🚀 <strong>Quick Start</strong></a>
 </p>
 
@@ -22,11 +24,11 @@
 
 ## What It Does
 
-`@keshavsoft/git-sibling-cloner` takes any list of Git repositories (a JSON Source of Truth manifest) and shallow-clones (`--depth 1`) them side-by-side as sibling folders in your workspace.
+`git-sibling-cloner` takes any list of Git repositories (a JSON Source of Truth manifest) and shallow-clones (`--depth 1`) them side-by-side as sibling folders in your workspace.
 
 - **Zero npm/ecosystem coupling:** Clones repositories from any ecosystem (npm, Cargo, Python, Go, GitHub orgs).
 - **25s Fail-Safe Timeout:** Prevents hanging builds or terminal freezes on slow or dead remotes.
-- **Cross-Platform Process-Tree Killing:** Employs Windows `taskkill /pid <PID> /T /F` and POSIX `SIGKILL` to prevent orphaned background git locks.
+- **Cross-Platform Process-Tree Termination:** Employs Windows `taskkill /pid <PID> /T /F` and POSIX `SIGKILL` to prevent orphaned background git locks.
 - **Prompt Suppression:** Disables interactive password/passphrase prompts (`GIT_TERMINAL_PROMPT=0`, `GIT_ASKPASS=echo`).
 - **Idempotent incremental runs:** Skips folders that already exist on disk.
 
@@ -36,10 +38,10 @@
 
 ```bash
 # Clone from a manifest file
-npx @keshavsoft/git-sibling-cloner manifest.json
+npx git-sibling-cloner manifest.json
 
 # Clone into a specific folder
-npx @keshavsoft/git-sibling-cloner manifest.json ./my-workspace
+npx git-sibling-cloner manifest.json ./my-workspace
 ```
 
 ---
@@ -49,10 +51,10 @@ npx @keshavsoft/git-sibling-cloner manifest.json ./my-workspace
 Stream a manifest directly into the cloner via standard input:
 
 ```bash
-cat manifest.json | npx @keshavsoft/git-sibling-cloner
+cat manifest.json | npx git-sibling-cloner
 
-# Pipe directly from @keshavsoft/npm-repo-resolver:
-npx @keshavsoft/npm-repo-resolver express | npx @keshavsoft/git-sibling-cloner ./express-sources
+# Pipe directly from npm-repo-resolver:
+npx npm-repo-resolver express | npx git-sibling-cloner ./express-sources
 ```
 
 ---
@@ -79,7 +81,7 @@ The input manifest is a simple JSON array:
 ## Programmatic API (ESM)
 
 ```javascript
-import { cloneSiblings } from "@keshavsoft/git-sibling-cloner";
+import { cloneSiblings } from "git-sibling-cloner";
 
 const manifest = [
   { folder: "express", cloneUrl: "https://github.com/expressjs/express.git" },
@@ -98,8 +100,8 @@ console.log(`Cloned ${summary.clonedCount} repos!`);
 
 ## Ecosystem
 
-- **Dependency Tree & Provenance:** [`@keshavsoft/npm-repo-resolver`](https://github.com/keshavsoft/npm-repo-resolver)
-- **Sibling Workspace Cloner:** [`@keshavsoft/git-sibling-cloner`](https://github.com/keshavsoft/git-sibling-cloner) *(This package)*
+- **Dependency Tree & Provenance:** [`npm-repo-resolver`](https://github.com/keshavsoft/npm-repo-resolver)
+- **Sibling Workspace Cloner:** [`git-sibling-cloner`](https://github.com/keshavsoft/git-sibling-cloner) *(This package)*
 - **All-in-One CLI Suite:** [`@keshavsoft/npm-source-explorer`](https://github.com/keshavsoft/npm-source-explorer)
 
 ---
@@ -115,4 +117,3 @@ console.log(`Cloned ${summary.clonedCount} repos!`);
 
 This project is licensed under the [MIT License](./LICENSE).  
 Copyright © 2026 [KeshavSoft](https://github.com/keshavsoft).
-
