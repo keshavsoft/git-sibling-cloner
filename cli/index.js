@@ -115,3 +115,4 @@ main().catch((error) => {
   console.error(`\ngit-sibling-cloner error: ${error.message}\n`);
   process.exitCode = 1;
 });
+

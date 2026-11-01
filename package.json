@@ -1,5 +1,5 @@
 {
-  "name": "@keshavsoft/git-sibling-cloner",
+  "name": "git-sibling-cloner",
   "version": "1.0.0",
   "description": "Fast, fail-safe shallow-cloning of Git repositories side-by-side as siblings from any Source of Truth manifest.",
   "type": "module",
