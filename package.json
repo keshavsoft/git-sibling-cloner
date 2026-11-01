@@ -1,0 +1,48 @@
+{
+  "name": "@keshavsoft/git-sibling-cloner",
+  "version": "1.0.0",
+  "description": "Fast, fail-safe shallow-cloning of Git repositories side-by-side as siblings from any Source of Truth manifest.",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "bin": {
+    "git-sibling-cloner": "./cli/index.js"
+  },
+  "files": [
+    "src/",
+    "cli/",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test",
+    "check": "node --check cli/index.js && node --check src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/keshavsoft/git-sibling-cloner.git"
+  },
+  "homepage": "https://github.com/keshavsoft/git-sibling-cloner#readme",
+  "bugs": {
+    "url": "https://github.com/keshavsoft/git-sibling-cloner/issues"
+  },
+  "author": "KeshavSoft",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {},
+  "keywords": [
+    "git",
+    "clone",
+    "shallow-clone",
+    "siblings",
+    "workspace",
+    "manifest",
+    "source-of-truth",
+    "cli",
+    "developer-tools"
+  ],
+  "license": "MIT"
+}
