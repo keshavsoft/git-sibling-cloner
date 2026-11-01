@@ -8,7 +8,7 @@
     ".": "./src/index.js"
   },
   "bin": {
-    "git-sibling-cloner": "./cli/index.js"
+    "git-sibling-cloner": "cli/index.js"
   },
   "files": [
     "src/",
