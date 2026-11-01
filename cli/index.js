@@ -10,18 +10,18 @@ const packageJson = JSON.parse(
 const VERSION = packageJson.version;
 
 function help() {
-  console.log(`@keshavsoft/git-sibling-cloner v${VERSION}
+  console.log(`git-sibling-cloner v${VERSION}
 
 Fast, fail-safe shallow-cloning of Git repositories side-by-side as siblings
 from any Source of Truth manifest.
 
 Usage:
-  npx @keshavsoft/git-sibling-cloner <manifest.json> [destination-folder]
-  cat manifest.json | npx @keshavsoft/git-sibling-cloner [destination-folder]
+  npx git-sibling-cloner <manifest.json> [destination-folder]
+  cat manifest.json | npx git-sibling-cloner [destination-folder]
 
 Examples:
-  npx @keshavsoft/git-sibling-cloner repos.json ./my-workspace
-  npx @keshavsoft/npm-repo-resolver express | npx @keshavsoft/git-sibling-cloner ./sources
+  npx git-sibling-cloner repos.json ./my-workspace
+  npx npm-repo-resolver express | npx git-sibling-cloner ./sources
 `);
 }
 
@@ -52,24 +52,26 @@ async function main() {
   let manifestData = null;
   let targetDir = process.cwd();
 
-  // 1. Try reading from stdin first (for piping)
-  const stdinInput = await readStdin();
-  if (stdinInput) {
-    try {
-      manifestData = JSON.parse(stdinInput);
-    } catch {
-      throw new Error("Invalid JSON manifest piped from standard input.");
-    }
-    if (positional[0]) {
-      targetDir = path.resolve(positional[0]);
-    }
-  } else if (positional.length > 0) {
-    // 2. Read from manifest file
+  // 1. If positional argument supplied, read manifest file
+  if (positional.length > 0) {
     const manifestPath = path.resolve(positional[0]);
     const fileContent = await fs.readFile(manifestPath, "utf8");
     manifestData = JSON.parse(fileContent);
     if (positional[1]) {
       targetDir = path.resolve(positional[1]);
+    }
+  } else if (!process.stdin.isTTY) {
+    // 2. Try reading from stdin (for piping)
+    const stdinInput = await readStdin();
+    if (stdinInput) {
+      try {
+        manifestData = JSON.parse(stdinInput);
+      } catch {
+        throw new Error("Invalid JSON manifest piped from standard input.");
+      }
+    } else {
+      help();
+      return;
     }
   } else {
     help();
