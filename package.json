@@ -1,11 +1,12 @@
 {
   "name": "git-sibling-cloner",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Fast, fail-safe shallow-cloning of Git repositories side-by-side as siblings from any Source of Truth manifest.",
   "type": "module",
   "main": "./src/index.js",
   "exports": {
-    ".": "./src/index.js"
+    ".": "./src/index.js",
+    "./v1": "./src/v1/index.js"
   },
   "bin": {
     "git-sibling-cloner": "cli/index.js"
@@ -18,7 +19,7 @@
   ],
   "scripts": {
     "test": "node --test",
-    "check": "node --check cli/index.js && node --check src/index.js"
+    "check": "node --check cli/index.js && node --check src/index.js && node --check src/v1/index.js"
   },
   "repository": {
     "type": "git",

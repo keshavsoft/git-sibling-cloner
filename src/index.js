@@ -1,11 +1,9 @@
 /**
- * @keshavsoft/git-sibling-cloner
- * ----------------------------------------------------------------------------
- * Sibling Git cloner that consumes any Source of Truth manifest and safely
- * shallow-clones repositories side-by-side into a workspace.
+ * git-sibling-cloner
+ *
+ * Root export pointing to V1 Engine:
+ * Fast, fail-safe shallow-cloning of Git repositories side-by-side as siblings.
  */
 
-export { cloneSiblings } from "./builder.js";
-export { cloneRepo, killProcessTree } from "./cloner.js";
-export { cloneSiblings as default } from "./builder.js";
-
+export { cloneSiblings, cloneRepo, killProcessTree, default } from "./v1/index.js";
+export * from "./v1/index.js";

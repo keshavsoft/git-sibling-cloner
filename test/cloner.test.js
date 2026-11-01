@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import path from "node:path";
 import os from "node:os";
-import { cloneSiblings } from "../src/index.js";
+import { cloneSiblings } from "../src/v1/index.js";
 
 test("cloner: skips existing directory cleanly", async () => {
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "git-sibling-test-"));
